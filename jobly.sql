@@ -1,7 +1,7 @@
 \echo 'Delete and recreate jobly db?'
 \prompt 'Return for yes or control-C to cancel > ' foo
 
-DROP DATABASE jobly;
+DROP DATABASE IF EXISTS jobly;
 CREATE DATABASE jobly;
 \connect jobly
 
