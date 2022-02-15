@@ -221,39 +221,39 @@ describe('remove', function () {
 
 /****************************** apply for job */
 
-// describe('applyForJob', function () {
-//   test('works as intended', async function () {
-//     await User.applyForJob('u1', testJobId[1])
+describe('applyForJob', function () {
+  test('works as intended', async function () {
+    await User.applyForJob('u1', testJobId[1])
 
-//     const res = await db.query(
-//       `
-//       SELECT * FROM applications WHERE job_id = $1
-//     `,
-//       [testJobId[1]]
-//     )
-//     expect(res.rows).toEqual([
-//       {
-//         job_id: testJobId[1],
-//         username: 'u1'
-//       }
-//     ])
-//   })
+    const res = await db.query(
+      `
+      SELECT * FROM applications WHERE job_id = $1
+    `,
+      [testJobId[1]]
+    )
+    expect(res.rows).toEqual([
+      {
+        job_id: testJobId[1],
+        username: 'u1'
+      }
+    ])
+  })
 
-//   test('not found if there is no matching job', async function () {
-//     try {
-//       await User.applyForJob('u1', 0, 'applied')
-//       fail()
-//     } catch (err) {
-//       expect(err instanceof NotFoundError).toBeTruthy()
-//     }
-//   })
+  test('not found if there is no matching job', async function () {
+    try {
+      await User.applyForJob('u1', 0, 'applied')
+      fail()
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy()
+    }
+  })
 
-//   test('not found if no matching user', async function () {
-//     try {
-//       await User.applyForJob('nahhh', testJobId[0], 'applied')
-//       fail()
-//     } catch (err) {
-//       expect(err instanceof NotFoundError).toBeTruthy()
-//     }
-//   })
-// })
+  test('not found if no matching user', async function () {
+    try {
+      await User.applyForJob('nahhh', testJobId[0], 'applied')
+      fail()
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy()
+    }
+  })
+})

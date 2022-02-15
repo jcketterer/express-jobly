@@ -209,7 +209,7 @@ class User {
    *
    */
 
-  static async applyForJob(username, id) {
+  static async applyForJob(username, jobId) {
     const checkOne = await db.query(
       `
       SELECT id
