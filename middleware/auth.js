@@ -1,11 +1,10 @@
-"use strict";
+'use strict'
 
 /** Convenience middleware to handle common auth cases in routes. */
 
-const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../config");
-const { UnauthorizedError } = require("../expressError");
-
+const jwt = require('jsonwebtoken')
+const { SECRET_KEY } = require('../config')
+const { UnauthorizedError } = require('../expressError')
 
 /** Middleware: Authenticate user.
  *
@@ -17,14 +16,14 @@ const { UnauthorizedError } = require("../expressError");
 
 function authenticateJWT(req, res, next) {
   try {
-    const authHeader = req.headers && req.headers.authorization;
+    const authHeader = req.headers && req.headers.authorization
     if (authHeader) {
-      const token = authHeader.replace(/^[Bb]earer /, "").trim();
-      res.locals.user = jwt.verify(token, SECRET_KEY);
+      const token = authHeader.replace(/^[Bb]earer /, '').trim()
+      res.locals.user = jwt.verify(token, SECRET_KEY)
     }
-    return next();
+    return next()
   } catch (err) {
-    return next();
+    return next()
   }
 }
 
@@ -35,48 +34,45 @@ function authenticateJWT(req, res, next) {
 
 function ensureLoggedIn(req, res, next) {
   try {
-    if (!res.locals.user) throw new UnauthorizedError();
-    return next();
+    if (!res.locals.user) throw new UnauthorizedError()
+    return next()
   } catch (err) {
-    return next(err);
+    return next(err)
   }
 }
 
-/** Middleware to check if a user is admin 
- * 
+/** Middleware to check if a user is admin
+ *
  */
 
 function ensureIsAdmin(req, res, next) {
   try {
     if (!res.locals.user || !res.locals.user.isAdmin) {
-      throw new UnauthorizedError();
+      throw new UnauthorizedError()
     }
-    return next();
+    return next()
   } catch (err) {
     return next(err)
   }
 }
 
 /** Middleware to check if token matches user regardless if admin or not
- * 
+ *
  */
 
 function ensureCorrectToken(req, res, next) {
   try {
-    const user = res.locals.user;
-    if (!(user && (user.isAdmin || user.username === req.params.username))) {
-      throw new UnauthorizedError();
-    }
-    return next();
+    if (!res.locals.user) throw new UnauthorizedError()
+    if (!res.locals.user.isAdmin && res.locals.user.username !== req.params.username) throw new UnauthorizedError()
+    return next()
   } catch (err) {
     return next(err)
   }
 }
-
 
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
   ensureIsAdmin,
   ensureCorrectToken
-};
+}
